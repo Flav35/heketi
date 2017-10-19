@@ -1,5 +1,4 @@
 #!/bin/sh
-set -e
 
 function do_request(){
   KUBE_NAMESPACE=$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)
@@ -26,6 +25,7 @@ EOF
 
 while true
 do
+  test $(curl http://localhost:8080) || exit
   gzip -c $HEKETI_DB > /backupdb/heketi.db.gz
   do_request
   sleep 60
