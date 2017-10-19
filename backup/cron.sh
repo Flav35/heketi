@@ -3,7 +3,7 @@
 function do_request(){
   KUBE_NAMESPACE=$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)
   KUBE_TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
-  SECRET_DATA=$(cat /backupdb/heketi.db.gz | base64)
+  SECRET_DATA=$(cat /backupdb/heketi.db | base64)
   cat <<EOF > /tmp/data.json
 {
   "kind": "Secret",
@@ -13,7 +13,7 @@ function do_request(){
     "namespace": "$KUBE_NAMESPACE",
   },
   "data": {
-    "heketi.db.gz": "$SECRET_DATA"
+    "heketi.db": "$SECRET_DATA"
   },
   "type": "Opaque"
 }
@@ -26,7 +26,7 @@ EOF
 while true
 do
   test $(curl http://localhost:8080) || exit
-  gzip -c $HEKETI_DB > /backupdb/heketi.db.gz
+  cp $HEKETI_DB /backupdb/heketi.db
   do_request
   sleep 60
 done
