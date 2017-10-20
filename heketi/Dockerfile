@@ -1,6 +1,7 @@
 # set author and base
 FROM golang AS build
 MAINTAINER Flavien Hardy <flav.hardy@gmail.com>
+ENV HEKETI_VERSION v5.0.0
 
 # install dependencies, build and cleanup
 RUN apt update
@@ -9,7 +10,7 @@ RUN apt install -y golang-glide git
 RUN mkdir -p /go/src/github.com/heketi
 
 WORKDIR /go/src/github.com/heketi
-RUN git clone -b master https://github.com/heketi/heketi.git
+RUN git clone -b $HEKETI_VERSION https://github.com/heketi/heketi.git
 
 WORKDIR /go/src/github.com/heketi/heketi
 RUN glide install -v
