@@ -27,10 +27,9 @@ COPY --from=build /go/src/github.com/heketi/heketi/client/cli/go/heketi-cli /usr
 
 # post install config and volume setup
 ADD ./heketi.json /etc/heketi/heketi.json
-ADD ./entrypoint.sh /entrypoint.sh
 VOLUME /var/lib/heketi
 
 # expose port, set user and set entrypoint with config option
 ENTRYPOINT [""]
-CMD ["/entrypoint.sh"]
+CMD ["/usr/bin/heketi", "--config=/etc/heketi/heketi.json"]
 EXPOSE 8080
